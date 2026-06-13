@@ -17,6 +17,6 @@ void main() {
   pos.y -= uScroll * 1.2;
 
   vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-  gl_PointSize = uSize * aScale * (300.0 / -mvPosition.z);
+  gl_PointSize = uSize * aScale * (80.0 / -mvPosition.z);
   gl_Position = projectionMatrix * mvPosition;
 }

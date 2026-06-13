@@ -38,7 +38,7 @@ const SunsetParticles = ({ scrollRef }: Props) => {
     () => ({
       uTime: { value: 0 },
       uScroll: { value: 0 },
-      uSize: { value: 12 },
+      uSize: { value: 4 },
       uColorA: { value: new THREE.Color('#e8952a') },
       uColorB: { value: new THREE.Color('#fde8c0') },
       uOpacity: { value: 0.35 },

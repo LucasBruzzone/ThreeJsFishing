@@ -35,11 +35,6 @@ const WorldScene = ({ scrollRef }: Props) => (
       <SunsetParticles scrollRef={scrollRef} />
 
       <EffectComposer>
-        <Bloom
-          intensity={post.bloomIntensity}
-          luminanceThreshold={post.bloomThreshold}
-          luminanceSmoothing={post.luminanceSmoothing}
-        />
         <ChromaticAberration
           offset={new THREE.Vector2(post.chromaticAberrationOffset, post.chromaticAberrationOffset)}
           blendFunction={BlendFunction.NORMAL}
@@ -51,7 +46,7 @@ const WorldScene = ({ scrollRef }: Props) => (
           darkness={post.vignetteDarkness}
           blendFunction={BlendFunction.NORMAL}
         />
-        <Noise opacity={0.025} blendFunction={BlendFunction.OVERLAY} />
+        <Noise opacity={0.02} blendFunction={BlendFunction.OVERLAY} />
       </EffectComposer>
     </Canvas>
   </div>
