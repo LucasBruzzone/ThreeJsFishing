@@ -5,6 +5,7 @@ import { BlendFunction } from 'postprocessing'
 import * as THREE from 'three'
 
 import SunsetParticles from '../objects/SunsetParticles'
+import SunsetSky from '../objects/SunsetSky'
 import ForestParticles from '../objects/ForestParticles'
 import UnderwaterParticles from '../objects/UnderwaterParticles'
 import SceneController from '../objects/SceneController'
@@ -31,6 +32,7 @@ const WorldScene = ({ scrollRef }: Props) => (
       <fog attach="fog" args={[initialZone.fogColor.clone(), initialZone.fogNear, initialZone.fogFar]} />
 
       <SceneController scrollRef={scrollRef} />
+      <SunsetSky scrollRef={scrollRef} />
       <SunsetParticles scrollRef={scrollRef} />
       <ForestParticles scrollRef={scrollRef} />
       <UnderwaterParticles scrollRef={scrollRef} />
