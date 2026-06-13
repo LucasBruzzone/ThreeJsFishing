@@ -1,11 +1,13 @@
 import { type MutableRefObject } from 'react'
 import { Canvas } from '@react-three/fiber'
+import { Environment } from '@react-three/drei'
 import { EffectComposer, ChromaticAberration, Vignette, Noise } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import * as THREE from 'three'
 
 import SunsetParticles from '../objects/SunsetParticles'
 import SunsetSky from '../objects/SunsetSky'
+import BeachScene from '../objects/BeachScene'
 import ForestParticles from '../objects/ForestParticles'
 import UnderwaterParticles from '../objects/UnderwaterParticles'
 import SceneController from '../objects/SceneController'
@@ -31,8 +33,11 @@ const WorldScene = ({ scrollRef }: Props) => (
     >
       <fog attach="fog" args={[initialZone.fogColor.clone(), initialZone.fogNear, initialZone.fogFar]} />
 
+      <Environment preset="sunset" environmentIntensity={0.6} />
+
       <SceneController scrollRef={scrollRef} />
       <SunsetSky scrollRef={scrollRef} />
+      <BeachScene scrollRef={scrollRef} />
       <SunsetParticles scrollRef={scrollRef} />
       <ForestParticles scrollRef={scrollRef} />
       <UnderwaterParticles scrollRef={scrollRef} />
