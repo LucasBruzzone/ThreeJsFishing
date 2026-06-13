@@ -16,8 +16,8 @@ export const useScrollProgress = (): MutableRefObject<number> => {
       smoothWheel: true,
     })
 
-    lenis.on('scroll', ({ progress }: { progress: number }) => {
-      progressRef.current = progress
+    lenis.on('scroll', (instance) => {
+      progressRef.current = instance.progress
     })
 
     ScrollTrigger.scrollerProxy(document.body, {
