@@ -6,6 +6,7 @@ import * as THREE from 'three'
 
 import SunsetParticles from '../objects/SunsetParticles'
 import SunsetSky from '../objects/SunsetSky'
+import BeachScene from '../objects/BeachScene'
 import ForestParticles from '../objects/ForestParticles'
 import UnderwaterParticles from '../objects/UnderwaterParticles'
 import SceneController from '../objects/SceneController'
@@ -33,6 +34,7 @@ const WorldScene = ({ scrollRef }: Props) => (
 
       <SceneController scrollRef={scrollRef} />
       <SunsetSky scrollRef={scrollRef} />
+      <BeachScene scrollRef={scrollRef} />
       <SunsetParticles scrollRef={scrollRef} />
       <ForestParticles scrollRef={scrollRef} />
       <UnderwaterParticles scrollRef={scrollRef} />
