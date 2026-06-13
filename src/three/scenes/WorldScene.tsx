@@ -5,8 +5,8 @@ import { BlendFunction } from 'postprocessing'
 import * as THREE from 'three'
 
 import SunsetParticles from '../objects/SunsetParticles'
+import SceneController from '../objects/SceneController'
 import { ZONE_POST } from '../config/postprocessing'
-import { ZONE_LIGHTS } from '../config/lighting'
 import { ZONES } from '../config/zones'
 
 interface Props {
@@ -14,25 +14,20 @@ interface Props {
 }
 
 const post = ZONE_POST[0]
-const lights = ZONE_LIGHTS[0]
-const zone = ZONES[0]
+const initialZone = ZONES[0]
+const initialBackground = initialZone.fogColor.clone()
 
 const WorldScene = ({ scrollRef }: Props) => (
   <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
     <Canvas
       dpr={[1, 1.5]}
-      camera={{ position: zone.cameraPosition.toArray(), fov: 60, near: 0.1, far: 200 }}
+      camera={{ position: initialZone.cameraPosition.toArray(), fov: 60, near: 0.1, far: 200 }}
       gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}
-      style={{ background: `#${zone.fogColor.getHexString()}` }}
+      scene={{ background: initialBackground }}
     >
-      <fog attach="fog" args={[zone.fogColor, zone.fogNear, zone.fogFar]} />
-      <ambientLight intensity={lights.ambientIntensity} color={lights.ambientColor} />
-      <directionalLight
-        intensity={lights.directionalIntensity}
-        color={lights.directionalColor}
-        position={lights.directionalPosition}
-      />
+      <fog attach="fog" args={[initialZone.fogColor.clone(), initialZone.fogNear, initialZone.fogFar]} />
 
+      <SceneController scrollRef={scrollRef} />
       <SunsetParticles scrollRef={scrollRef} />
 
       <EffectComposer>
