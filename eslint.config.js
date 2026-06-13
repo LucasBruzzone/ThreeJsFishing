@@ -36,6 +36,9 @@ export default [
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'no-console': 'warn',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // R3F mutation in useFrame is correct — these experimental rules conflict with 3D animation loops
+      'react-hooks/purity': 'off',
+      'react-hooks/immutability': 'off',
     },
   },
 ]

@@ -1,0 +1,14 @@
+.root {
+  position: relative;
+  width: 100%;
+}
+
+.sections {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.section {
+  height: 100vh;
+}
