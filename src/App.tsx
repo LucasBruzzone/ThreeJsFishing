@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 
 import WorldScene from './three/scenes/WorldScene'
+import HeroSection from './components/HeroSection'
+import DepthIndicator from './components/DepthIndicator'
 import { useScrollProgress } from './three/hooks/useScrollProgress'
 import { getZoneTransition } from './three/hooks/useZoneTransition'
 
@@ -14,7 +16,7 @@ const App = () => {
   useEffect(() => {
     const tick = () => {
       const { currentZone } = getZoneTransition(scrollRef.current)
-      setActiveZone(currentZone)
+      setActiveZone(prev => prev === currentZone ? prev : currentZone)
       rafRef.current = requestAnimationFrame(tick)
     }
 
@@ -26,8 +28,9 @@ const App = () => {
   return (
     <div className={styles.root}>
       <WorldScene scrollRef={scrollRef} />
+      <DepthIndicator activeZone={activeZone} />
       <div className={styles.sections}>
-        <div className={styles.section} data-zone={activeZone} />
+        <HeroSection />
         <div className={styles.section} />
         <div className={styles.section} />
         <div className={styles.section} />

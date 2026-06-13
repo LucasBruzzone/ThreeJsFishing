@@ -1,6 +1,6 @@
 import { type MutableRefObject } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { EffectComposer, Bloom, ChromaticAberration, Vignette, Noise } from '@react-three/postprocessing'
+import { EffectComposer, ChromaticAberration, Vignette, Noise } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import * as THREE from 'three'
 
