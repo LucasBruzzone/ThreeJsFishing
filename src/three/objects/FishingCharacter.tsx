@@ -9,9 +9,11 @@ interface Props {
   scrollRef: MutableRefObject<number>
 }
 
+const CAST_SCRUB_START = 0.0
+const CAST_SCRUB_END = 0.95
+
 const FishingCharacter = ({ scrollRef }: Props) => {
   const groupRef = useRef<THREE.Group>(null)
-  const castingRef = useRef(false)
 
   const idle = useGLTF('/models/fishing-idle.glb')
   const cast = useGLTF('/models/fishing-cast.glb')
@@ -20,40 +22,46 @@ const FishingCharacter = ({ scrollRef }: Props) => {
   const { actions: castActions } = useAnimations(cast.animations, groupRef)
 
   useEffect(() => {
-    const action = idleActions['mixamo.com']
-    if (action) {
-      action.reset().fadeIn(0.5).play()
-      action.setLoop(THREE.LoopRepeat, Infinity)
+    const idleAction = idleActions['mixamo.com']
+    const castAction = castActions['mixamo.com']
+    if (idleAction) {
+      idleAction.reset().play()
+      idleAction.setLoop(THREE.LoopRepeat, Infinity)
     }
-  }, [idleActions])
+    if (castAction) {
+      castAction.reset().play()
+      castAction.setLoop(THREE.LoopOnce, 1)
+      castAction.clampWhenFinished = true
+      castAction.paused = true
+      castAction.weight = 0
+    }
+  }, [idleActions, castActions])
 
   useFrame(() => {
     const { currentZone, blend } = getZoneTransition(scrollRef.current)
-    if (currentZone !== 0) return
+    const idleAction = idleActions['mixamo.com']
+    const castAction = castActions['mixamo.com']
+    if (!idleAction || !castAction) return
 
-    const shouldCast = blend > 0.15
-    if (shouldCast && !castingRef.current) {
-      castingRef.current = true
-      idleActions['mixamo.com']?.fadeOut(0.3)
-      const castAction = castActions['mixamo.com']
-      if (castAction) {
-        castAction.reset().fadeIn(0.3).play()
-        castAction.setLoop(THREE.LoopOnce, 1)
-        castAction.clampWhenFinished = true
-      }
-    } else if (!shouldCast && castingRef.current) {
-      castingRef.current = false
-      castActions['mixamo.com']?.fadeOut(0.3)
-      const idleAction = idleActions['mixamo.com']
-      if (idleAction) {
-        idleAction.reset().fadeIn(0.3).play()
-        idleAction.setLoop(THREE.LoopRepeat, Infinity)
-      }
+    if (currentZone !== 0) {
+      idleAction.weight = 1
+      castAction.weight = 0
+      return
     }
+
+    const scrubRange = CAST_SCRUB_END - CAST_SCRUB_START
+    const scrub = THREE.MathUtils.clamp((blend - CAST_SCRUB_START) / scrubRange, 0, 1)
+    castAction.time = scrub * castAction.getClip().duration
+
+    // Hard switch from idle to cast — blending mid-frame produces the
+    // arms-out limbo pose because frame 0 of the cast clip is near T-pose.
+    const useCast = blend > 0.03
+    castAction.weight = useCast ? 1 : 0
+    idleAction.weight = useCast ? 0 : 1
   })
 
   return (
-    <group ref={groupRef} position={[1.5, -1.05, 0]} rotation={[0, -0.4, 0]} scale={0.01}>
+    <group ref={groupRef} position={[1.2, -1.0, 4]} rotation={[0, Math.PI, 0]} scale={1}>
       <primitive object={idle.scene} />
     </group>
   )

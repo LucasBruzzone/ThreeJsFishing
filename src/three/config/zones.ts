@@ -12,8 +12,8 @@ export interface ZoneConfig {
 export const ZONES: ZoneConfig[] = [
   {
     name: 'sunset',
-    cameraPosition: new THREE.Vector3(0, 2, 10),
-    cameraTarget: new THREE.Vector3(0, 0, 0),
+    cameraPosition: new THREE.Vector3(0, 1.4, 6.5),
+    cameraTarget: new THREE.Vector3(0, 0, -5),
     fogColor: new THREE.Color('#1a0820'),
     fogNear: 15,
     fogFar: 60,

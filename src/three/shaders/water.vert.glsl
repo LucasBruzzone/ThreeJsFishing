@@ -2,6 +2,7 @@ uniform float uTime;
 
 varying vec2 vUv;
 varying float vElevation;
+varying vec3 vWorldPosition;
 
 void main() {
   vUv = uv;
@@ -15,5 +16,8 @@ void main() {
   pos.y += wave1 + wave2 + wave3;
   vElevation = pos.y;
 
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+  vec4 worldPos = modelMatrix * vec4(pos, 1.0);
+  vWorldPosition = worldPos.xyz;
+
+  gl_Position = projectionMatrix * viewMatrix * worldPos;
 }

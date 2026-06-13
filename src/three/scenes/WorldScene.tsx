@@ -1,5 +1,6 @@
 import { type MutableRefObject } from 'react'
 import { Canvas } from '@react-three/fiber'
+import { Environment } from '@react-three/drei'
 import { EffectComposer, ChromaticAberration, Vignette, Noise } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import * as THREE from 'three'
@@ -31,6 +32,8 @@ const WorldScene = ({ scrollRef }: Props) => (
       scene={{ background: initialBackground }}
     >
       <fog attach="fog" args={[initialZone.fogColor.clone(), initialZone.fogNear, initialZone.fogFar]} />
+
+      <Environment preset="sunset" />
 
       <SceneController scrollRef={scrollRef} />
       <SunsetSky scrollRef={scrollRef} />
