@@ -1,45 +1,33 @@
 import { useEffect, useRef, type MutableRefObject } from 'react'
 import Lenis from 'lenis'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export const useScrollProgress = (): MutableRefObject<number> => {
   const progressRef = useRef(0)
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.4,
+      duration: 1.2,
       easing: (time) => Math.min(1, 1.001 - Math.pow(2, -10 * time)),
-      orientation: 'vertical',
       smoothWheel: true,
     })
 
-    lenis.on('scroll', ({ progress }: { progress: number }) => {
-      progressRef.current = progress
+    lenis.scrollTo(0, { immediate: true })
+
+    lenis.on('scroll', (instance) => {
+      progressRef.current = instance.progress
     })
 
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value?: number) {
-        if (value !== undefined) lenis.scrollTo(value, { immediate: true })
-        return lenis.scroll
-      },
-      getBoundingClientRect() {
-        return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight }
-      },
-    })
+    let rafId: number
 
-    const onRaf = (time: number) => {
+    const tick = (time: number) => {
       lenis.raf(time)
-      ScrollTrigger.update()
+      rafId = requestAnimationFrame(tick)
     }
 
-    gsap.ticker.add(onRaf)
-    gsap.ticker.lagSmoothing(0)
+    rafId = requestAnimationFrame(tick)
 
     return () => {
-      gsap.ticker.remove(onRaf)
+      cancelAnimationFrame(rafId)
       lenis.destroy()
     }
   }, [])

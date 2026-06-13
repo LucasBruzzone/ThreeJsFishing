@@ -2,6 +2,7 @@ import { useRef, useMemo, type MutableRefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
+import { getZoneTransition } from '../hooks/useZoneTransition'
 import vertexShader from '../shaders/sunsetParticles.vert.glsl'
 import fragmentShader from '../shaders/sunsetParticles.frag.glsl'
 
@@ -52,6 +53,10 @@ const SunsetParticles = ({ scrollRef }: Props) => {
     timeRef.current += delta
     uniforms.uTime.value = timeRef.current
     uniforms.uScroll.value = scrollRef.current
+
+    const { currentZone, blend } = getZoneTransition(scrollRef.current)
+    const zoneOpacity = currentZone === 0 ? 1 - blend : 0
+    uniforms.uOpacity.value = 0.35 * zoneOpacity
   })
 
   return (
