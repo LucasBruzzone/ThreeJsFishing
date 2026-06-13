@@ -1,0 +1,41 @@
+:root {
+  /* Sunset palette */
+  --sunset-orange: #e8952a;
+  --sunset-gold: #f5a623;
+  --sunset-violet: #1a0820;
+  --sunset-cream: #fde8c0;
+
+  /* Forest palette */
+  --forest-deep: #162e0c;
+  --forest-moss: #2d5a1b;
+  --forest-light: #6abf45;
+
+  /* Shore palette */
+  --shore-night: #0d2840;
+  --shore-water: #5aaed4;
+
+  /* Shallow sea palette */
+  --sea-shallow-deep: #040c1a;
+  --sea-shallow-glint: #4080c0;
+
+  /* Deep sea palette */
+  --sea-deep: #000408;
+  --sea-bioluminescence: #00aaff;
+  --sea-blue: #2a6090;
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* Spacing scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+  --space-2xl: 8rem;
+
+  /* Transitions */
+  --transition-slow: 800ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-medium: 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
