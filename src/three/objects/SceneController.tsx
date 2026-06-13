@@ -56,7 +56,6 @@ const SceneController = ({ scrollRef }: Props) => {
   })
 
   const initial = ZONE_LIGHTS[0]
-  const initialZone = ZONES[0]
 
   return (
     <>
@@ -65,7 +64,7 @@ const SceneController = ({ scrollRef }: Props) => {
         ref={dirRef}
         intensity={initial.directionalIntensity}
         color={initial.directionalColor}
-        position={initialZone.cameraPosition.toArray()}
+        position={initial.directionalPosition}
       />
     </>
   )
