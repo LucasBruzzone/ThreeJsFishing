@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diseño — Portfolio Lucas</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #060810; color: #ccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  .section {
+    min-height: 100vh;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.5;
+  }
+
+  .section-title {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.2;
+  }
+
+  .content-area {
+    max-width: 700px;
+  }
+
+  h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 300; letter-spacing: -1px; line-height: 1.1; }
+  h2 { font-size: clamp(22px, 3vw, 36px); font-weight: 300; line-height: 1.3; }
+  p { font-size: 15px; line-height: 1.7; opacity: 0.7; }
+
+  .chip {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin: 4px;
+    border: 1px solid currentColor;
+    opacity: 0.6;
+  }
+
+  .project-card {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+  }
+
+  .depth-bar {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    z-index: 100;
+  }
+
+  .depth-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .depth-line {
+    width: 1px;
+    height: 40px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* ATARDECER */
+  #atardecer {
+    background: linear-gradient(180deg, #0d0510 0%, #1a0820 15%, #3d1008 40%, #7a2e05 65%, #c4601a 85%, #e8952a 100%);
+  }
+  #atardecer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 65% 75%, rgba(255,160,40,0.25), transparent);
+  }
+  #atardecer .section-title { color: #f5a623; }
+  #atardecer h1 { color: #fde8c0; }
+  #atardecer .sub { color: #f5a623; font-size: 18px; font-weight: 300; margin-top: 12px; opacity: 0.8; letter-spacing: 1px; }
+  #atardecer .scroll-hint { color: rgba(245,166,35,0.5); font-size: 12px; letter-spacing: 3px; margin-top: 48px; text-transform: uppercase; }
+
+  /* BOSQUE */
+  #bosque {
+    background: linear-gradient(180deg, #0a1a06 0%, #0f2409 30%, #162e0c 60%, #1c3a10 100%);
+  }
+  #bosque::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 40% 60% at 20% 30%, rgba(80,180,50,0.07), transparent);
+  }
+  #bosque .section-title { color: #6abf45; }
+  #bosque h2 { color: #c8eaaa; }
+
+  /* ORILLA */
+  #orilla {
+    background: linear-gradient(180deg, #0a1e30 0%, #0d2840 30%, #0f3350 60%, #0a2035 100%);
+  }
+  #orilla::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 20% at 50% 100%, rgba(80,160,220,0.12), transparent);
+  }
+  #orilla .section-title { color: #5aaed4; }
+  #orilla h2 { color: #a8d8f0; }
+  .project-card { background: rgba(255,255,255,0.03); }
+
+  /* WRITING */
+  #writing {
+    background: linear-gradient(180deg, #060f1e 0%, #040c1a 40%, #030a16 100%);
+  }
+  #writing::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 50% at 30% 60%, rgba(40,100,180,0.1), transparent);
+  }
+  #writing .section-title { color: #4080c0; }
+  #writing h2 { color: #8ab8e0; }
+
+  /* MAR PROFUNDO */
+  #profundo {
+    background: linear-gradient(180deg, #020810 0%, #010609 50%, #000408 100%);
+  }
+  #profundo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 80%, rgba(0,60,120,0.2), transparent);
+  }
+  #profundo .section-title { color: #2a6090; }
+  #profundo h2 { color: #5090c0; }
+
+  .bio-particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+    50% { transform: translateY(-20px) scale(1.2); opacity: 0.8; }
+  }
+
+  .skill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .nav-hint {
+    position: fixed;
+    top: 24px;
+    left: 40px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    z-index: 100;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-hint">Lucas Bruzzone — Portfolio</div>
+
+<div class="depth-bar">
+  <div class="depth-dot" style="background:#f5a623;width:8px;height:8px;"></div>
+  <div class="depth-line"></div>
+  <div class="depth-dot"></div>
+  <div class="depth-line"></div>
+  <div class="depth-dot"></div>
+  <div class="depth-line"></div>
+  <div class="depth-dot"></div>
+  <div class="depth-line"></div>
+  <div class="depth-dot"></div>
+</div>
+
+<!-- ═══ ATARDECER ═══ -->
+<section class="section" id="atardecer">
+  <div class="content-area">
+    <div class="section-title" style="color:#f5a62366;">🌅 &nbsp;Atardecer</div>
+    <div class="label" style="color:#f5a623;">Staff Engineer · Montevideo</div>
+    <h1>Hola,<br>soy Lucas.</h1>
+    <p class="sub">Construyo software, lidero equipos<br>y hago velas en mi tiempo libre.</p>
+    <p class="scroll-hint">↓ &nbsp; Scrolleá para conocerme</p>
+  </div>
+
+  <!-- Partículas de luz cálida — en la versión real son Three.js -->
+  <div class="bio-particle" style="width:3px;height:3px;background:#f5a623;top:20%;left:70%;animation-delay:0s;animation-duration:8s;"></div>
+  <div class="bio-particle" style="width:2px;height:2px;background:#ffd580;top:40%;left:80%;animation-delay:2s;animation-duration:6s;"></div>
+  <div class="bio-particle" style="width:4px;height:4px;background:#ff8c42;top:60%;left:60%;animation-delay:4s;animation-duration:10s;"></div>
+  <div class="bio-particle" style="width:2px;height:2px;background:#f5a623;top:30%;left:85%;animation-delay:1s;animation-duration:7s;"></div>
+</section>
+
+<!-- ═══ BOSQUE ═══ -->
+<section class="section" id="bosque">
+  <div class="content-area">
+    <div class="section-title" style="color:#6abf4566;">🌿 &nbsp;Bosque</div>
+    <h2>Soy curioso,<br>ambicioso, y calmo.</h2>
+    <p style="margin-top:20px;">Staff Engineer trabajando con equipos en Uruguay y UK. Me importa tanto construir bien como mejorar cómo construimos. Mentoreo, propongo procesos, encuentro lo que falta.</p>
+    <p style="margin-top:14px;">Fuera del trabajo: meditación, pesca, plantas, fútbol. Años de terapia y muchas experiencias me dejaron algo que vale más que cualquier framework — conocerme.</p>
+    <div style="margin-top:24px;">
+      <span class="chip" style="color:#6abf45;">Meditación</span>
+      <span class="chip" style="color:#6abf45;">Pesca</span>
+      <span class="chip" style="color:#6abf45;">Plantas</span>
+      <span class="chip" style="color:#6abf45;">Fútbol</span>
+      <span class="chip" style="color:#6abf45;">Velas</span>
+      <span class="chip" style="color:#6abf45;">1% mejor cada día</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ORILLA ═══ -->
+<section class="section" id="orilla">
+  <div class="content-area" style="max-width:800px;">
+    <div class="section-title" style="color:#5aaed466;">🎣 &nbsp;Orilla</div>
+    <h2>Cosas que hice<br>que me importan.</h2>
+
+    <div style="margin-top:32px;">
+      <div class="project-card" style="border-color:rgba(90,174,212,0.15);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <h3 style="color:#a8d8f0;font-weight:400;font-size:20px;">Kompass</h3>
+          <span style="font-size:11px;color:#5aaed4;letter-spacing:2px;text-transform:uppercase;">Tech · SaaS</span>
+        </div>
+        <p>Descripción a completar con lo que más te orgullece de este proyecto.</p>
+      </div>
+
+      <div class="project-card" style="border-color:rgba(200,160,80,0.15);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <h3 style="color:#e8c87a;font-weight:400;font-size:20px;">Pausa</h3>
+          <span style="font-size:11px;color:#c4a050;letter-spacing:2px;text-transform:uppercase;">Velas · Emprendimiento</span>
+        </div>
+        <p>Una marca que construiste con las manos. Velas que tienen nombre, intención, calma.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WRITING ═══ -->
+<section class="section" id="writing">
+  <div class="content-area">
+    <div class="section-title" style="color:#4080c066;">📝 &nbsp;Mar poco profundo</div>
+    <h2>Cosas en las<br>que pienso.</h2>
+    <p style="margin-top:20px;">Notas, artículos, reflexiones. Sobre engineering, sobre liderazgo, sobre lo que aprendí de la vida. Escritura honesta, no posts de LinkedIn.</p>
+
+    <div style="margin-top:32px;border-left:1px solid rgba(64,128,192,0.2);padding-left:20px;">
+      <p style="opacity:0.4;font-size:13px;letter-spacing:1px;">— Artículos próximamente —</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MAR PROFUNDO ═══ -->
+<section class="section" id="profundo">
+  <!-- Partículas bioluminiscentes -->
+  <div class="bio-particle" style="width:3px;height:3px;background:#00aaff;top:15%;left:75%;animation-delay:0s;animation-duration:9s;"></div>
+  <div class="bio-particle" style="width:2px;height:2px;background:#0088dd;top:45%;left:20%;animation-delay:3s;animation-duration:7s;"></div>
+  <div class="bio-particle" style="width:4px;height:4px;background:#00ccff;top:70%;left:85%;animation-delay:6s;animation-duration:11s;"></div>
+  <div class="bio-particle" style="width:2px;height:2px;background:#0099ee;top:80%;left:40%;animation-delay:1s;animation-duration:8s;"></div>
+  <div class="bio-particle" style="width:3px;height:3px;background:#00aaff;top:25%;left:55%;animation-delay:4s;animation-duration:6s;"></div>
+
+  <div class="content-area">
+    <div class="section-title" style="color:#2a609066;">🌊 &nbsp;Fondo</div>
+    <h2>Con lo que trabajo<br>y cómo encontrarme.</h2>
+
+    <div class="skill-row" style="margin-top:24px;">
+      <span class="chip" style="color:#5090c0;">TypeScript</span>
+      <span class="chip" style="color:#5090c0;">React</span>
+      <span class="chip" style="color:#5090c0;">Ruby on Rails</span>
+      <span class="chip" style="color:#5090c0;">Node.js</span>
+      <span class="chip" style="color:#5090c0;">AWS</span>
+      <span class="chip" style="color:#5090c0;">System Design</span>
+      <span class="chip" style="color:#5090c0;">Mentoring</span>
+    </div>
+
+    <div style="margin-top:48px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.05);">
+      <p style="opacity:0.5;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;">Encontrarme</p>
+      <p>lucasbruzzone97@gmail.com</p>
+      <div style="margin-top:12px;display:flex;gap:16px;">
+        <span style="color:#5090c0;font-size:13px;">GitHub</span>
+        <span style="color:#5090c0;font-size:13px;">LinkedIn</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Depth indicator update on scroll
+const sections = ['atardecer','bosque','orilla','writing','profundo'];
+const dots = document.querySelectorAll('.depth-dot');
+const colors = ['#f5a623','#6abf45','#5aaed4','#4080c0','#2a6090'];
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const winH = window.innerHeight;
+  let current = 0;
+  sections.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && el.offsetTop <= scrollY + winH * 0.5) current = i;
+  });
+  dots.forEach((dot, i) => {
+    dot.style.background = i === current ? colors[i] : 'rgba(255,255,255,0.15)';
+    dot.style.width = i === current ? '8px' : '5px';
+    dot.style.height = i === current ? '8px' : '5px';
+  });
+});
+</script>
+</body>
+</html>
