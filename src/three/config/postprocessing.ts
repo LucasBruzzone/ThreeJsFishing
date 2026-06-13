@@ -9,12 +9,12 @@ export interface PostConfig {
 
 export const ZONE_POST: PostConfig[] = [
   {
-    bloomIntensity: 0.4,
-    bloomThreshold: 0.7,
-    luminanceSmoothing: 0.4,
-    chromaticAberrationOffset: 0.0003,
-    vignetteOffset: 0.3,
-    vignetteDarkness: 0.7,
+    bloomIntensity: 0.15,
+    bloomThreshold: 0.95,
+    luminanceSmoothing: 0.6,
+    chromaticAberrationOffset: 0.0002,
+    vignetteOffset: 0.4,
+    vignetteDarkness: 0.8,
   },
   {
     bloomIntensity: 0.3,
