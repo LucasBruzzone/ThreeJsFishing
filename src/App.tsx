@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
 import WorldScene from './three/scenes/WorldScene'
-import HeroSection from './components/HeroSection'
 import DepthIndicator from './components/DepthIndicator'
 import { useScrollProgress } from './three/hooks/useScrollProgress'
 import { getZoneTransition } from './three/hooks/useZoneTransition'
@@ -30,7 +29,7 @@ const App = () => {
       <WorldScene scrollRef={scrollRef} />
       <DepthIndicator activeZone={activeZone} />
       <div className={styles.sections}>
-        <HeroSection />
+        <div className={styles.section} />
         <div className={styles.section} />
         <div className={styles.section} />
         <div className={styles.section} />
