@@ -5,7 +5,10 @@ import { BlendFunction } from 'postprocessing'
 import * as THREE from 'three'
 
 import SunsetParticles from '../objects/SunsetParticles'
+import ForestParticles from '../objects/ForestParticles'
+import UnderwaterParticles from '../objects/UnderwaterParticles'
 import SceneController from '../objects/SceneController'
+import DynamicBloom from '../objects/DynamicBloom'
 import { ZONE_POST } from '../config/postprocessing'
 import { ZONES } from '../config/zones'
 
@@ -29,8 +32,11 @@ const WorldScene = ({ scrollRef }: Props) => (
 
       <SceneController scrollRef={scrollRef} />
       <SunsetParticles scrollRef={scrollRef} />
+      <ForestParticles scrollRef={scrollRef} />
+      <UnderwaterParticles scrollRef={scrollRef} />
 
       <EffectComposer>
+        <DynamicBloom scrollRef={scrollRef} />
         <ChromaticAberration
           offset={new THREE.Vector2(post.chromaticAberrationOffset, post.chromaticAberrationOffset)}
           blendFunction={BlendFunction.NORMAL}
