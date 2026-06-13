@@ -11,7 +11,7 @@ interface Props {
 }
 
 const SceneController = ({ scrollRef }: Props) => {
-  const { scene, camera } = useThree()
+  const { scene } = useThree()
   const ambientRef = useRef<THREE.AmbientLight>(null)
   const dirRef = useRef<THREE.DirectionalLight>(null)
 
@@ -24,7 +24,6 @@ const SceneController = ({ scrollRef }: Props) => {
   )
 
   const dirPos = useMemo(() => ZONE_LIGHTS.map(l => new THREE.Vector3(...l.directionalPosition)), [])
-  const camPos = useMemo(() => ZONES.map(z => z.cameraPosition.clone()), [])
 
   useFrame(() => {
     const { currentZone, nextZone, blend } = getZoneTransition(scrollRef.current)
@@ -54,8 +53,6 @@ const SceneController = ({ scrollRef }: Props) => {
       dirRef.current.intensity = THREE.MathUtils.lerp(lA.directionalIntensity, lB.directionalIntensity, blend)
       dirRef.current.position.lerpVectors(dirPos[currentZone], dirPos[nextZone], blend)
     }
-
-    camera.position.lerpVectors(camPos[currentZone], camPos[nextZone], blend)
   })
 
   const initial = ZONE_LIGHTS[0]
