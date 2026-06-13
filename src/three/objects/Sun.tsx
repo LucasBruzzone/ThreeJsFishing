@@ -1,27 +1,9 @@
 import { useMemo } from 'react'
 import * as THREE from 'three'
 
-const SUN_POSITION: [number, number, number] = [0, -0.5, -40]
-
-const haloVertexShader = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`
-
-const haloFragmentShader = `
-  uniform vec3 uColor;
-  uniform float uIntensity;
-  uniform float uFalloff;
-  varying vec2 vUv;
-  void main() {
-    float d = distance(vUv, vec2(0.5));
-    float alpha = pow(max(0.0, 1.0 - d * 2.0), uFalloff);
-    gl_FragColor = vec4(uColor * uIntensity, alpha);
-  }
-`
+import { SUN_POSITION } from '../config/sun'
+import haloVertexShader from '../shaders/sunHalo.vert.glsl'
+import haloFragmentShader from '../shaders/sunHalo.frag.glsl'
 
 const Sun = () => {
   const outerUniforms = useMemo(
@@ -43,7 +25,7 @@ const Sun = () => {
   )
 
   return (
-    <group position={SUN_POSITION}>
+    <group position={SUN_POSITION.toArray()}>
       {/* Outer atmospheric scatter — wide, soft */}
       <mesh renderOrder={10}>
         <planeGeometry args={[18, 18, 1, 1]} />

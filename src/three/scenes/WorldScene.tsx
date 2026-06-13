@@ -33,7 +33,7 @@ const WorldScene = ({ scrollRef }: Props) => (
     >
       <fog attach="fog" args={[initialZone.fogColor.clone(), initialZone.fogNear, initialZone.fogFar]} />
 
-      <Environment preset="sunset" />
+      <Environment preset="sunset" environmentIntensity={0.6} />
 
       <SceneController scrollRef={scrollRef} />
       <SunsetSky scrollRef={scrollRef} />

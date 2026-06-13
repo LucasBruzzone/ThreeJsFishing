@@ -2,6 +2,7 @@ import { useRef, useMemo, type MutableRefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
+import { SUN_POSITION } from '../config/sun'
 import { getZoneTransition } from '../hooks/useZoneTransition'
 import FishingCharacter from './FishingCharacter'
 import PalmTree from './PalmTree'
@@ -25,6 +26,7 @@ const BeachScene = ({ scrollRef }: Props) => {
     () => ({
       uTime: { value: 0 },
       uOpacity: { value: 1 },
+      uSunPosition: { value: SUN_POSITION.clone() },
     }),
     [],
   )

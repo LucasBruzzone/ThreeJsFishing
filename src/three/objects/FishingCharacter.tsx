@@ -9,7 +9,6 @@ interface Props {
   scrollRef: MutableRefObject<number>
 }
 
-const CAST_SCRUB_START = 0.0
 const CAST_SCRUB_END = 0.95
 
 const FishingCharacter = ({ scrollRef }: Props) => {
@@ -49,8 +48,7 @@ const FishingCharacter = ({ scrollRef }: Props) => {
       return
     }
 
-    const scrubRange = CAST_SCRUB_END - CAST_SCRUB_START
-    const scrub = THREE.MathUtils.clamp((blend - CAST_SCRUB_START) / scrubRange, 0, 1)
+    const scrub = THREE.MathUtils.clamp(blend / CAST_SCRUB_END, 0, 1)
     castAction.time = scrub * castAction.getClip().duration
 
     // Hard switch from idle to cast — blending mid-frame produces the

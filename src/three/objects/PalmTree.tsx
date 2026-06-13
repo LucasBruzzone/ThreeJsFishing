@@ -123,7 +123,7 @@ const PalmTree = ({ position, rotation, scale = 1 }: Props) => {
       const length = 2.2 + Math.sin(frondIndex * 1.3) * 0.4
       const droop = 0.8 + Math.sin(frondIndex * 0.7) * 0.2
       const geo = buildFrondGeometry(length, 0.18, droop)
-      return { angle, droop, geo, length }
+      return { angle, droop, geo }
     })
   }, [])
 
@@ -149,11 +149,6 @@ const PalmTree = ({ position, rotation, scale = 1 }: Props) => {
           </mesh>
         </group>
       ))}
-
-      <mesh position={[0, TRUNK_HEIGHT * 0.5, 0]} rotation={[0, 0, 0]}>
-        <sphereGeometry args={[0.04, 6, 6]} />
-        <meshStandardMaterial color={TRUNK_BROWN} />
-      </mesh>
     </group>
   )
 }

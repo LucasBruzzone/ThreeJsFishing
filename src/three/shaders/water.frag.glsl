@@ -1,5 +1,6 @@
 uniform float uTime;
 uniform float uOpacity;
+uniform vec3 uSunPosition;
 
 varying vec2 vUv;
 varying float vElevation;
@@ -17,14 +18,14 @@ void main() {
   // Blend the water toward the dark sunset sky at the horizon so the bright
   // shallow color does not bleed into the skyline as a hard cyan band.
   vec3 horizonTint = vec3(0.08, 0.04, 0.10);
-  float horizonBlend = smoothstep(-25.0, -42.0, vWorldPosition.z);
+  float horizonStart = uSunPosition.z + 15.0;
+  float horizonEnd   = uSunPosition.z - 2.0;
+  float horizonBlend = smoothstep(horizonStart, horizonEnd, vWorldPosition.z);
   color = mix(color, horizonTint, horizonBlend);
 
-  // Sun reflection column down the center of the water (toward camera).
-  // The sun is at world (0, sunY, -40). The reflection forms a vertical streak
-  // along the world X = 0 axis, brighter close to the sun, broken up by waves.
-  float distFromCenter = abs(vWorldPosition.x);
-  float distFromHorizon = clamp((vWorldPosition.z + 40.0) / 35.0, 0.0, 1.0);
+  // Sun reflection column from the sun toward the camera.
+  float distFromCenter = abs(vWorldPosition.x - uSunPosition.x);
+  float distFromHorizon = clamp((vWorldPosition.z - uSunPosition.z) / 35.0, 0.0, 1.0);
   // Wider near camera, narrow at horizon
   float columnWidth = mix(0.6, 6.5, distFromHorizon);
   float column = exp(-pow(distFromCenter / columnWidth, 2.0));
@@ -36,7 +37,7 @@ void main() {
 
   // Foam highlights on wave peaks — fade out at distance so the horizon line is clean.
   float foamLine = smoothstep(0.12, 0.18, vElevation);
-  float foamDistanceFade = 1.0 - smoothstep(-20.0, -40.0, vWorldPosition.z);
+  float foamDistanceFade = 1.0 - smoothstep(horizonStart, horizonEnd, vWorldPosition.z);
   color = mix(color, foam, foamLine * 0.4 * foamDistanceFade);
 
   // Specular shimmer
