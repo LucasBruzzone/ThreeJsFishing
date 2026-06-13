@@ -7,7 +7,6 @@ export interface ZoneConfig {
   fogColor: THREE.Color
   fogNear: number
   fogFar: number
-  backgroundColor: THREE.Color
 }
 
 export const ZONES: ZoneConfig[] = [
@@ -18,7 +17,6 @@ export const ZONES: ZoneConfig[] = [
     fogColor: new THREE.Color('#1a0820'),
     fogNear: 15,
     fogFar: 60,
-    backgroundColor: new THREE.Color('#1a0820'),
   },
   {
     name: 'forest',
@@ -27,7 +25,6 @@ export const ZONES: ZoneConfig[] = [
     fogColor: new THREE.Color('#0a1a06'),
     fogNear: 10,
     fogFar: 50,
-    backgroundColor: new THREE.Color('#0a1a06'),
   },
   {
     name: 'shore',
@@ -36,7 +33,6 @@ export const ZONES: ZoneConfig[] = [
     fogColor: new THREE.Color('#060f1a'),
     fogNear: 12,
     fogFar: 55,
-    backgroundColor: new THREE.Color('#060f1a'),
   },
   {
     name: 'shallowSea',
@@ -45,7 +41,6 @@ export const ZONES: ZoneConfig[] = [
     fogColor: new THREE.Color('#020610'),
     fogNear: 8,
     fogFar: 45,
-    backgroundColor: new THREE.Color('#020610'),
   },
   {
     name: 'deepSea',
@@ -54,7 +49,6 @@ export const ZONES: ZoneConfig[] = [
     fogColor: new THREE.Color('#000204'),
     fogNear: 5,
     fogFar: 35,
-    backgroundColor: new THREE.Color('#000204'),
   },
 ]
 
