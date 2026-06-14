@@ -5,3 +5,10 @@ dist/
 .DS_Store
 *.log
 .superpowers/
+
+# Local debug artifacts (screenshots, browser session captures)
+/*.png
+/*.jpeg
+/*.jpg
+.playwright-mcp/
+.screenshots/

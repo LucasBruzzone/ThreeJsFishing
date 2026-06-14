@@ -46,7 +46,7 @@ const BeachScene = ({ scrollRef }: Props) => {
 
   return (
     <group ref={groupRef}>
-      <Sun />
+      <Sun scrollRef={scrollRef} />
 
 
       {/* Sand beach */}

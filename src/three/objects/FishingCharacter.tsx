@@ -4,6 +4,7 @@ import { useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 
 import { getZoneTransition } from '../hooks/useZoneTransition'
+import FishingRod from './FishingRod'
 
 interface Props {
   scrollRef: MutableRefObject<number>
@@ -59,9 +60,12 @@ const FishingCharacter = ({ scrollRef }: Props) => {
   })
 
   return (
-    <group ref={groupRef} position={[1.2, -1.0, 4]} rotation={[0, Math.PI, 0]} scale={1}>
-      <primitive object={idle.scene} />
-    </group>
+    <>
+      <group ref={groupRef} position={[1.2, -1.0, 4]} rotation={[0, Math.PI, 0]} scale={1}>
+        <primitive object={idle.scene} />
+      </group>
+      <FishingRod characterGroup={groupRef} scrollRef={scrollRef} />
+    </>
   )
 }
 
