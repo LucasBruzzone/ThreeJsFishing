@@ -1,13 +1,13 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import { CylinderGeometry, Mesh, Quaternion, Vector3 } from 'three'
 
 import { hookWorldPosition, rodTipWorldPosition } from '../state/hookState'
 import { WATER_SURFACE_Y } from '../config/zones'
 import { CANDLE_HEIGHT } from './Candle'
 
 const ROPE_RADIUS = 0.0018
-const LINE_UP = new THREE.Vector3(0, 1, 0)
+const LINE_UP = new Vector3(0, 1, 0)
 // Once the candle crosses the water plane the rope switches from "diagonal
 // to the rod tip on the beach" to "straight up toward the unseen surface" —
 // the side-on camera makes the diagonal read as a confusing slash across
@@ -15,18 +15,18 @@ const LINE_UP = new THREE.Vector3(0, 1, 0)
 const UNDERWATER_ROPE_LENGTH = 80
 
 const HookLine = () => {
-  const meshRef = useRef<THREE.Mesh>(null)
+  const meshRef = useRef<Mesh>(null)
 
   const geometry = useMemo(
-    () => new THREE.CylinderGeometry(ROPE_RADIUS, ROPE_RADIUS, 1, 8, 1, true),
+    () => new CylinderGeometry(ROPE_RADIUS, ROPE_RADIUS, 1, 8, 1, true),
     [],
   )
 
-  const ropeBottom = useMemo(() => new THREE.Vector3(), [])
-  const target = useMemo(() => new THREE.Vector3(), [])
-  const midpoint = useMemo(() => new THREE.Vector3(), [])
-  const direction = useMemo(() => new THREE.Vector3(), [])
-  const quat = useMemo(() => new THREE.Quaternion(), [])
+  const ropeBottom = useMemo(() => new Vector3(), [])
+  const target = useMemo(() => new Vector3(), [])
+  const midpoint = useMemo(() => new Vector3(), [])
+  const direction = useMemo(() => new Vector3(), [])
+  const quat = useMemo(() => new Quaternion(), [])
 
   useFrame(() => {
     const mesh = meshRef.current

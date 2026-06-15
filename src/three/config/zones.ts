@@ -1,10 +1,10 @@
-import * as THREE from 'three'
+import { Color, Vector3 } from 'three'
 
 export interface ZoneConfig {
   name: string
-  cameraPosition: THREE.Vector3
-  cameraTarget: THREE.Vector3
-  fogColor: THREE.Color
+  cameraPosition: Vector3
+  cameraTarget: Vector3
+  fogColor: Color
   fogNear: number
   fogFar: number
 }
@@ -12,41 +12,41 @@ export interface ZoneConfig {
 export const ZONES: ZoneConfig[] = [
   {
     name: 'sunset',
-    cameraPosition: new THREE.Vector3(0, 1.4, 6.5),
-    cameraTarget: new THREE.Vector3(0, 0, -5),
-    fogColor: new THREE.Color('#1a0820'),
+    cameraPosition: new Vector3(0, 1.4, 6.5),
+    cameraTarget: new Vector3(0, 0, -5),
+    fogColor: new Color('#1a0820'),
     fogNear: 15,
     fogFar: 60,
   },
   {
     name: 'surface',
-    cameraPosition: new THREE.Vector3(0, -1.4, -2),
-    cameraTarget: new THREE.Vector3(0, -6, -8),
-    fogColor: new THREE.Color('#053447'),
+    cameraPosition: new Vector3(0, -1.4, -2),
+    cameraTarget: new Vector3(0, -6, -8),
+    fogColor: new Color('#053447'),
     fogNear: 4,
     fogFar: 30,
   },
   {
     name: 'shallow',
-    cameraPosition: new THREE.Vector3(0, -6, -8),
-    cameraTarget: new THREE.Vector3(0, -14, -12),
-    fogColor: new THREE.Color('#03212d'),
+    cameraPosition: new Vector3(0, -6, -8),
+    cameraTarget: new Vector3(0, -14, -12),
+    fogColor: new Color('#03212d'),
     fogNear: 3,
     fogFar: 22,
   },
   {
     name: 'mid',
-    cameraPosition: new THREE.Vector3(0, -18, -14),
-    cameraTarget: new THREE.Vector3(0, -28, -16),
-    fogColor: new THREE.Color('#01121b'),
+    cameraPosition: new Vector3(0, -18, -14),
+    cameraTarget: new Vector3(0, -28, -16),
+    fogColor: new Color('#01121b'),
     fogNear: 2,
     fogFar: 16,
   },
   {
     name: 'abyss',
-    cameraPosition: new THREE.Vector3(0, -38, -18),
-    cameraTarget: new THREE.Vector3(0, -50, -18),
-    fogColor: new THREE.Color('#000305'),
+    cameraPosition: new Vector3(0, -38, -18),
+    cameraTarget: new Vector3(0, -50, -18),
+    fogColor: new Color('#000305'),
     fogNear: 1,
     fogFar: 10,
   },
@@ -56,20 +56,20 @@ export const ZONES: ZoneConfig[] = [
 // over the beach, dips toward the water surface, punches through, then settles
 // into the surface zone pose. Targets pull the gaze downward through the same
 // curve so the look-vector swings naturally with the body of the camera.
-export const DIVE_POSITIONS: THREE.Vector3[] = [
-  new THREE.Vector3(0, 1.4, 6.5),
-  new THREE.Vector3(0, 0.6, 3.5),
-  new THREE.Vector3(0, -0.2, 0.5),
-  new THREE.Vector3(0, -0.95, -1.2),
-  new THREE.Vector3(0, -1.4, -2),
+export const DIVE_POSITIONS: Vector3[] = [
+  new Vector3(0, 1.4, 6.5),
+  new Vector3(0, 0.6, 3.5),
+  new Vector3(0, -0.2, 0.5),
+  new Vector3(0, -0.95, -1.2),
+  new Vector3(0, -1.4, -2),
 ]
 
-export const DIVE_TARGETS: THREE.Vector3[] = [
-  new THREE.Vector3(0, 0, -5),
-  new THREE.Vector3(0, -1, -5),
-  new THREE.Vector3(0, -3, -6),
-  new THREE.Vector3(0, -5, -7),
-  new THREE.Vector3(0, -6, -8),
+export const DIVE_TARGETS: Vector3[] = [
+  new Vector3(0, 0, -5),
+  new Vector3(0, -1, -5),
+  new Vector3(0, -3, -6),
+  new Vector3(0, -5, -7),
+  new Vector3(0, -6, -8),
 ]
 
 // Y of the water plane. Single source of truth: BeachScene positions the

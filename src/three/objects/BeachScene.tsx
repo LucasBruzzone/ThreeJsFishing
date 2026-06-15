@@ -1,6 +1,6 @@
 import { useRef, useMemo, type MutableRefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import { DoubleSide, Group } from 'three'
 
 import { SUN_POSITION } from '../config/sun'
 import { WATER_SURFACE_Y } from '../config/zones'
@@ -20,7 +20,7 @@ const SHORE_Z = -5
 
 const BeachScene = ({ scrollRef }: Props) => {
   const timeRef = useRef(0)
-  const groupRef = useRef<THREE.Group>(null)
+  const groupRef = useRef<Group>(null)
 
   const waterUniforms = useMemo(
     () => ({
@@ -75,7 +75,7 @@ const BeachScene = ({ scrollRef }: Props) => {
           fragmentShader={waterFragmentShader}
           uniforms={waterUniforms}
           transparent
-          side={THREE.DoubleSide}
+          side={DoubleSide}
         />
       </mesh>
 

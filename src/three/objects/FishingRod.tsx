@@ -1,6 +1,6 @@
 import { useRef, useEffect, useMemo, type MutableRefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import { Bone, CylinderGeometry, Euler, Group, Object3D, Vector3 } from 'three'
 
 import {
   HOOK_HANG_END,
@@ -14,44 +14,44 @@ import {
 import { hookWorldPosition, rodTipWorldPosition } from '../state/hookState'
 
 interface Props {
-  characterGroup: MutableRefObject<THREE.Group | null>
+  characterGroup: MutableRefObject<Group | null>
   scrollRef: MutableRefObject<number>
 }
 
 const HAND_BONE_SUFFIX = 'RightHand'
 const FINGER_SUFFIXES = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
 const ROD_LENGTH = 1.6
-const ROD_LOCAL_POSITION = new THREE.Vector3(0, 0.02, 0.0)
-const ROD_LOCAL_EULER = new THREE.Euler(0, 0, -Math.PI / 12)
-const ROD_TIP_LOCAL = new THREE.Vector3(0, ROD_LENGTH * 0.85, 0)
+const ROD_LOCAL_POSITION = new Vector3(0, 0.02, 0.0)
+const ROD_LOCAL_EULER = new Euler(0, 0, -Math.PI / 12)
+const ROD_TIP_LOCAL = new Vector3(0, ROD_LENGTH * 0.85, 0)
 
 const FishingRod = ({ characterGroup, scrollRef }: Props) => {
-  const rodGroupRef = useRef<THREE.Group>(null)
+  const rodGroupRef = useRef<Group>(null)
 
   const rodGeometry = useMemo(
-    () => new THREE.CylinderGeometry(0.004, 0.018, ROD_LENGTH, 6),
+    () => new CylinderGeometry(0.004, 0.018, ROD_LENGTH, 6),
     [],
   )
 
-  const rodTipWorld = useMemo(() => new THREE.Vector3(), [])
-  const hookHang = useMemo(() => new THREE.Vector3(), [])
-  const launchPoint = useRef<THREE.Vector3 | null>(null)
+  const rodTipWorld = useMemo(() => new Vector3(), [])
+  const hookHangPosition = useMemo(() => new Vector3(), [])
+  const launchPoint = useRef<Vector3 | null>(null)
 
   useEffect(() => {
-    const root = characterGroup.current
+    const characterRoot = characterGroup.current
     const rodGroup = rodGroupRef.current
-    if (!root || !rodGroup) return
+    if (!characterRoot || !rodGroup) return
 
-    let handBone: THREE.Object3D | null = null
+    let handBone: Object3D | null = null
     const boneCandidates: string[] = []
-    root.traverse((obj) => {
-      if ((obj as THREE.Bone).isBone) boneCandidates.push(obj.name)
+    characterRoot.traverse((object) => {
+      if ((object as Bone).isBone) boneCandidates.push(object.name)
       if (
         !handBone &&
-        obj.name.endsWith(HAND_BONE_SUFFIX) &&
-        !FINGER_SUFFIXES.some((s) => obj.name.endsWith(s))
+        object.name.endsWith(HAND_BONE_SUFFIX) &&
+        !FINGER_SUFFIXES.some((suffix) => object.name.endsWith(suffix))
       ) {
-        handBone = obj
+        handBone = object
       }
     })
     if (!handBone) {
@@ -59,7 +59,7 @@ const FishingRod = ({ characterGroup, scrollRef }: Props) => {
       return
     }
 
-    ;(handBone as THREE.Object3D).add(rodGroup)
+    ;(handBone as Object3D).add(rodGroup)
     rodGroup.position.copy(ROD_LOCAL_POSITION)
     rodGroup.rotation.copy(ROD_LOCAL_EULER)
   }, [characterGroup])
@@ -72,24 +72,24 @@ const FishingRod = ({ characterGroup, scrollRef }: Props) => {
     rodTipWorld.copy(ROD_TIP_LOCAL).applyMatrix4(rodGroup.matrixWorld)
     rodTipWorldPosition.copy(rodTipWorld)
 
-    const t = scrollRef.current
-    const hookOut = hookWorldPosition
+    const scrollProgress = scrollRef.current
+    const hookOutput = hookWorldPosition
 
-    if (t < HOOK_HANG_END) {
-      hookHang.copy(rodTipWorld)
-      hookHang.y -= 0.85
-      hookOut.copy(hookHang)
+    if (scrollProgress < HOOK_HANG_END) {
+      hookHangPosition.copy(rodTipWorld)
+      hookHangPosition.y -= 0.85
+      hookOutput.copy(hookHangPosition)
       launchPoint.current = null
-    } else if (t < HOOK_SPLASH_T) {
+    } else if (scrollProgress < HOOK_SPLASH_T) {
       if (!launchPoint.current) launchPoint.current = rodTipWorld.clone()
-      const flightT = (t - HOOK_HANG_END) / (HOOK_SPLASH_T - HOOK_HANG_END)
-      flightArc(launchPoint.current, flightT, hookOut)
-    } else if (t < HOOK_SINK_END) {
+      const flightProgress = (scrollProgress - HOOK_HANG_END) / (HOOK_SPLASH_T - HOOK_HANG_END)
+      flightArc(launchPoint.current, flightProgress, hookOutput)
+    } else if (scrollProgress < HOOK_SINK_END) {
       launchPoint.current = null
-      const sinkT = (t - HOOK_SPLASH_T) / (HOOK_SINK_END - HOOK_SPLASH_T)
-      hookOut.lerpVectors(HOOK_SPLASH_POINT, HOOK_SINK_END_POINT, descentEase(sinkT))
+      const sinkProgress = (scrollProgress - HOOK_SPLASH_T) / (HOOK_SINK_END - HOOK_SPLASH_T)
+      hookOutput.lerpVectors(HOOK_SPLASH_POINT, HOOK_SINK_END_POINT, descentEase(sinkProgress))
     } else {
-      hookOut.copy(HOOK_SINK_END_POINT)
+      hookOutput.copy(HOOK_SINK_END_POINT)
     }
   })
 

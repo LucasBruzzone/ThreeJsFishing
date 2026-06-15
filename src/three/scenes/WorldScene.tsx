@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import { EffectComposer, ChromaticAberration, Vignette, Noise } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
-import * as THREE from 'three'
+import { Vector2 } from 'three'
 
 import SunsetParticles from '../objects/SunsetParticles'
 import SunsetSky from '../objects/SunsetSky'
@@ -57,7 +57,7 @@ const WorldScene = ({ scrollRef }: Props) => (
       <EffectComposer>
         <DynamicBloom scrollRef={scrollRef} />
         <ChromaticAberration
-          offset={new THREE.Vector2(post.chromaticAberrationOffset, post.chromaticAberrationOffset)}
+          offset={new Vector2(post.chromaticAberrationOffset, post.chromaticAberrationOffset)}
           blendFunction={BlendFunction.NORMAL}
           radialModulation={false}
           modulationOffset={0}

@@ -1,6 +1,6 @@
 import { useMemo, useRef, type MutableRefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import { AdditiveBlending, Color, Group, MathUtils } from 'three'
 
 import { SUN_POSITION } from '../config/sun'
 import { HOOK_HANG_END, HOOK_SPLASH_T } from '../config/hookTrajectory'
@@ -18,11 +18,11 @@ interface Props {
 // on the halos (turning them transparent causes them to dim against the
 // additively-blended halos behind).
 const Sun = ({ scrollRef }: Props) => {
-  const groupRef = useRef<THREE.Group>(null)
+  const groupRef = useRef<Group>(null)
 
   const outerUniforms = useMemo(
     () => ({
-      uColor: { value: new THREE.Color('#ff6a1a') },
+      uColor: { value: new Color('#ff6a1a') },
       uIntensity: { value: 1.0 },
       uFalloff: { value: 2.2 },
     }),
@@ -31,7 +31,7 @@ const Sun = ({ scrollRef }: Props) => {
 
   const midUniforms = useMemo(
     () => ({
-      uColor: { value: new THREE.Color('#ffb060') },
+      uColor: { value: new Color('#ffb060') },
       uIntensity: { value: 1.2 },
       uFalloff: { value: 3.0 },
     }),
@@ -39,9 +39,9 @@ const Sun = ({ scrollRef }: Props) => {
   )
 
   useFrame(() => {
-    const t = scrollRef.current
-    const fade = THREE.MathUtils.clamp(
-      1 - (t - HOOK_HANG_END) / (HOOK_SPLASH_T - HOOK_HANG_END),
+    const scrollProgress = scrollRef.current
+    const fade = MathUtils.clamp(
+      1 - (scrollProgress - HOOK_HANG_END) / (HOOK_SPLASH_T - HOOK_HANG_END),
       0,
       1,
     )
@@ -64,7 +64,7 @@ const Sun = ({ scrollRef }: Props) => {
           transparent
           depthWrite={false}
           depthTest={false}
-          blending={THREE.AdditiveBlending}
+          blending={AdditiveBlending}
           toneMapped={false}
         />
       </mesh>
@@ -78,7 +78,7 @@ const Sun = ({ scrollRef }: Props) => {
           transparent
           depthWrite={false}
           depthTest={false}
-          blending={THREE.AdditiveBlending}
+          blending={AdditiveBlending}
           toneMapped={false}
         />
       </mesh>

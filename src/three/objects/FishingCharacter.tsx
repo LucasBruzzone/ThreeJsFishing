@@ -1,7 +1,7 @@
 import { useRef, useEffect, type MutableRefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF, useAnimations } from '@react-three/drei'
-import * as THREE from 'three'
+import { Group, LoopOnce, LoopRepeat, MathUtils } from 'three'
 
 import { getZoneTransition } from '../hooks/useZoneTransition'
 import { CAST_SCRUB_END } from '../config/hookTrajectory'
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const FishingCharacter = ({ scrollRef }: Props) => {
-  const groupRef = useRef<THREE.Group>(null)
+  const groupRef = useRef<Group>(null)
 
   const idle = useGLTF('/models/fishing-idle.glb')
   const cast = useGLTF('/models/fishing-cast.glb')
@@ -25,11 +25,11 @@ const FishingCharacter = ({ scrollRef }: Props) => {
     const castAction = castActions['mixamo.com']
     if (idleAction) {
       idleAction.reset().play()
-      idleAction.setLoop(THREE.LoopRepeat, Infinity)
+      idleAction.setLoop(LoopRepeat, Infinity)
     }
     if (castAction) {
       castAction.reset().play()
-      castAction.setLoop(THREE.LoopOnce, 1)
+      castAction.setLoop(LoopOnce, 1)
       castAction.clampWhenFinished = true
       castAction.paused = true
       castAction.weight = 0
@@ -48,8 +48,8 @@ const FishingCharacter = ({ scrollRef }: Props) => {
       return
     }
 
-    const scrub = THREE.MathUtils.clamp(blend / CAST_SCRUB_END, 0, 1)
-    castAction.time = scrub * castAction.getClip().duration
+    const clipProgress = MathUtils.clamp(blend / CAST_SCRUB_END, 0, 1)
+    castAction.time = clipProgress * castAction.getClip().duration
 
     // Hard switch from idle to cast — blending mid-frame produces the
     // arms-out limbo pose because frame 0 of the cast clip is near T-pose.

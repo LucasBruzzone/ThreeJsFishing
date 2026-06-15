@@ -1,6 +1,6 @@
 import { useRef, useMemo, type MutableRefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import { BufferAttribute, BufferGeometry, FrontSide, Mesh, MeshBasicMaterial, Points, PointsMaterial } from 'three'
 
 import { HOOK_SPLASH_T, HOOK_SPLASH_POINT } from '../config/hookTrajectory'
 
@@ -14,37 +14,37 @@ const SPLASH_DURATION = 0.04
 const DROPLET_COUNT = 28
 
 const Splash = ({ scrollRef }: Props) => {
-  const ringRef = useRef<THREE.Mesh>(null)
-  const ringMatRef = useRef<THREE.MeshBasicMaterial>(null)
-  const dropletsRef = useRef<THREE.Points>(null)
-  const dropletMatRef = useRef<THREE.PointsMaterial>(null)
+  const ringRef = useRef<Mesh>(null)
+  const ringMaterialRef = useRef<MeshBasicMaterial>(null)
+  const dropletsRef = useRef<Points>(null)
+  const dropletMaterialRef = useRef<PointsMaterial>(null)
 
   const { dropletGeometry, dropletVelocities } = useMemo(() => {
     const positions = new Float32Array(DROPLET_COUNT * 3)
     const velocities = new Float32Array(DROPLET_COUNT * 3)
-    for (let i = 0; i < DROPLET_COUNT; i++) {
-      const angle = (i / DROPLET_COUNT) * Math.PI * 2 + Math.random() * 0.3
+    for (let index = 0; index < DROPLET_COUNT; index++) {
+      const angle = (index / DROPLET_COUNT) * Math.PI * 2 + Math.random() * 0.3
       const spread = 0.4 + Math.random() * 0.6
-      velocities[i * 3 + 0] = Math.cos(angle) * spread
-      velocities[i * 3 + 1] = 0.8 + Math.random() * 0.7
-      velocities[i * 3 + 2] = Math.sin(angle) * spread
+      velocities[index * 3 + 0] = Math.cos(angle) * spread
+      velocities[index * 3 + 1] = 0.8 + Math.random() * 0.7
+      velocities[index * 3 + 2] = Math.sin(angle) * spread
     }
-    const geo = new THREE.BufferGeometry()
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    return { dropletGeometry: geo, dropletVelocities: velocities }
+    const bufferGeometry = new BufferGeometry()
+    bufferGeometry.setAttribute('position', new BufferAttribute(positions, 3))
+    return { dropletGeometry: bufferGeometry, dropletVelocities: velocities }
   }, [])
 
   useFrame(() => {
     const ring = ringRef.current
-    const ringMat = ringMatRef.current
+    const ringMaterial = ringMaterialRef.current
     const droplets = dropletsRef.current
-    const dropletMat = dropletMatRef.current
-    if (!ring || !ringMat || !droplets || !dropletMat) return
+    const dropletMaterial = dropletMaterialRef.current
+    if (!ring || !ringMaterial || !droplets || !dropletMaterial) return
 
-    const t = scrollRef.current
-    const fxT = (t - HOOK_SPLASH_T) / SPLASH_DURATION
+    const scrollProgress = scrollRef.current
+    const effectProgress = (scrollProgress - HOOK_SPLASH_T) / SPLASH_DURATION
 
-    if (fxT < 0 || fxT > 1) {
+    if (effectProgress < 0 || effectProgress > 1) {
       ring.visible = false
       droplets.visible = false
       return
@@ -54,22 +54,22 @@ const Splash = ({ scrollRef }: Props) => {
     droplets.visible = true
 
     // Ring expands and fades.
-    const scale = 0.2 + fxT * 2.4
+    const scale = 0.2 + effectProgress * 2.4
     ring.scale.set(scale, scale, scale)
-    ringMat.opacity = (1 - fxT) * 0.85
+    ringMaterial.opacity = (1 - effectProgress) * 0.85
 
     // Droplets fly outward and arc downward under gravity, fading near the end.
-    const arr = droplets.geometry.attributes.position.array as Float32Array
-    for (let i = 0; i < DROPLET_COUNT; i++) {
-      const vx = dropletVelocities[i * 3 + 0]
-      const vy = dropletVelocities[i * 3 + 1]
-      const vz = dropletVelocities[i * 3 + 2]
-      arr[i * 3 + 0] = vx * fxT
-      arr[i * 3 + 1] = vy * fxT - 1.5 * fxT * fxT
-      arr[i * 3 + 2] = vz * fxT
+    const positionArray = droplets.geometry.attributes.position.array as Float32Array
+    for (let index = 0; index < DROPLET_COUNT; index++) {
+      const velocityX = dropletVelocities[index * 3 + 0]
+      const velocityY = dropletVelocities[index * 3 + 1]
+      const velocityZ = dropletVelocities[index * 3 + 2]
+      positionArray[index * 3 + 0] = velocityX * effectProgress
+      positionArray[index * 3 + 1] = velocityY * effectProgress - 1.5 * effectProgress * effectProgress
+      positionArray[index * 3 + 2] = velocityZ * effectProgress
     }
     droplets.geometry.attributes.position.needsUpdate = true
-    dropletMat.opacity = (1 - fxT) * 0.9
+    dropletMaterial.opacity = (1 - effectProgress) * 0.9
   })
 
   return (
@@ -77,19 +77,19 @@ const Splash = ({ scrollRef }: Props) => {
       <mesh ref={ringRef} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
         <ringGeometry args={[0.18, 0.24, 32]} />
         <meshBasicMaterial
-          ref={ringMatRef}
+          ref={ringMaterialRef}
           color="#ffffff"
           transparent
           opacity={0}
           toneMapped={false}
           fog={false}
-          side={THREE.FrontSide}
+          side={FrontSide}
           depthWrite={false}
         />
       </mesh>
       <points ref={dropletsRef} geometry={dropletGeometry} visible={false}>
         <pointsMaterial
-          ref={dropletMatRef}
+          ref={dropletMaterialRef}
           color="#ffffff"
           size={0.08}
           transparent
