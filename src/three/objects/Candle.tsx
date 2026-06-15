@@ -15,7 +15,10 @@ interface Props {
 const VERTICAL = new THREE.Vector3(0, 1, 0)
 const UP_QUAT = new THREE.Quaternion()
 
-const TARGET_HEIGHT = 0.5
+// World-space height the candle model is scaled to. Exported because the
+// rope (HookLine) needs to know where the candle's top sits relative to
+// hookWorldPosition (which is the candle's base).
+export const CANDLE_HEIGHT = 0.5
 const CAST_SCALE = 0.5     // candle shrinks to half during flight
 const WATER_SCALE = 1.0    // full size once underwater
 const CANDLE_URL = '/models/candle.glb'
@@ -40,12 +43,12 @@ const Candle = ({ scrollRef }: Props) => {
   const { candleScene, baseScale, modelOffsetY, topY } = useMemo(() => {
     const cloned = scene.clone(true)
     const bbox = new THREE.Box3().setFromObject(cloned)
-    const computedScale = bbox.max.y - bbox.min.y > 0 ? TARGET_HEIGHT / (bbox.max.y - bbox.min.y) : 1
+    const computedScale = bbox.max.y - bbox.min.y > 0 ? CANDLE_HEIGHT / (bbox.max.y - bbox.min.y) : 1
     return {
       candleScene: cloned,
       baseScale: computedScale,
       modelOffsetY: -bbox.min.y * computedScale,
-      topY: TARGET_HEIGHT,
+      topY: CANDLE_HEIGHT,
     }
   }, [scene])
 
@@ -61,6 +64,15 @@ const Candle = ({ scrollRef }: Props) => {
       })
     })
   }, [candleScene])
+
+  // The spotLight's target must be assigned imperatively. Passing the ref
+  // via JSX (`target={spotTargetRef.current}`) captures `null` on the first
+  // render and never re-applies, so the cone would default to world origin.
+  useEffect(() => {
+    if (spotRef.current && spotTargetRef.current) {
+      spotRef.current.target = spotTargetRef.current
+    }
+  }, [])
 
   const flameUniforms = useMemo(() => ({ uTime: { value: 0 } }), [])
 
@@ -191,7 +203,6 @@ const Candle = ({ scrollRef }: Props) => {
           angle={Math.PI / 4}
           penumbra={0.85}
           decay={1.6}
-          target={spotTargetRef.current ?? undefined}
         />
       </group>
     </group>

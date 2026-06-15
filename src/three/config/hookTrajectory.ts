@@ -1,12 +1,25 @@
 import * as THREE from 'three'
 
-// Scroll-progress milestones for the hook's life cycle. HOOK_HANG_END is the
-// release point — derived from the actual cast clip (8.75s, mixamo.com): the
-// right-hand bone reaches peak velocity at clip fraction 0.22 (natural
-// release moment). FishingCharacter maps blend → scrub via scrub = blend /
-// 0.95, and zone 0 maps scroll → blend via blend = scroll * 4. Solving for
-// the release scroll: 0.22 = (scroll * 4) / 0.95  →  scroll = 0.052.
-export const HOOK_HANG_END = 0.052
+import { ZONE_COUNT } from './zones'
+
+// Fraction of the cast clip at which the character's right hand reaches peak
+// velocity (measured by sampling the mixamo.com clip at 8.75s, 190 frames).
+// This is the natural release moment — the hook detaches from the rod tip
+// when the swing is at maximum forward speed.
+const CAST_RELEASE_CLIP_FRAC = 0.22
+
+// How far into the cast clip FishingCharacter scrubs to before clamping at
+// the end. Re-exported so FishingCharacter consumes the same value and the
+// release timing stays locked.
+export const CAST_SCRUB_END = 0.95
+
+// Scroll-progress milestones for the hook's life cycle. HOOK_HANG_END is
+// derived from the cast clip's peak-velocity frame: FishingCharacter maps
+// blend → clip frac via `scrub = blend / CAST_SCRUB_END`, and zone 0 maps
+// scroll → blend via `blend = scroll * (ZONE_COUNT - 1)`. Solving for the
+// release scroll keeps the rod, hook, and character animation locked to the
+// same instant no matter how the scrub or zone count are tuned.
+export const HOOK_HANG_END = (CAST_RELEASE_CLIP_FRAC * CAST_SCRUB_END) / (ZONE_COUNT - 1)
 export const HOOK_SPLASH_T = 0.22
 export const HOOK_SINK_END = 0.95
 

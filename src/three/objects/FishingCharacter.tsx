@@ -4,13 +4,12 @@ import { useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 
 import { getZoneTransition } from '../hooks/useZoneTransition'
+import { CAST_SCRUB_END } from '../config/hookTrajectory'
 import FishingRod from './FishingRod'
 
 interface Props {
   scrollRef: MutableRefObject<number>
 }
-
-const CAST_SCRUB_END = 0.95
 
 const FishingCharacter = ({ scrollRef }: Props) => {
   const groupRef = useRef<THREE.Group>(null)

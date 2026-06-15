@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 import { hookWorldPosition, rodTipWorldPosition } from '../state/hookState'
+import { CANDLE_HEIGHT } from './Candle'
 
 const ROPE_RADIUS = 0.0018
 const LINE_UP = new THREE.Vector3(0, 1, 0)
@@ -12,12 +13,6 @@ const LINE_UP = new THREE.Vector3(0, 1, 0)
 // as a confusing slash across the frame.
 const WATER_SURFACE_Y = -1.15
 const UNDERWATER_ROPE_LENGTH = 80
-// hookWorldPosition is the candle's BASE in world space (Hook.tsx lifts the
-// model so its bottom sits there). The rope should attach to the candle's
-// TOP — otherwise the cylinder geometrically passes through the candle body
-// and the segment inside/below the wax is visible when scrolling, which
-// reads as "a piece of line left below" while reeling.
-const CANDLE_HEIGHT = 0.5
 
 const HookLine = () => {
   const meshRef = useRef<THREE.Mesh>(null)
