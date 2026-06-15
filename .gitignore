@@ -12,3 +12,6 @@ dist/
 /*.jpg
 .playwright-mcp/
 .screenshots/
+
+# Internal planning / spec docs (kept local for context, not published)
+docs/
