@@ -1,10 +1,10 @@
-import * as THREE from 'three'
+import { Color, Vector3 } from 'three'
 
 export interface ZoneConfig {
   name: string
-  cameraPosition: THREE.Vector3
-  cameraTarget: THREE.Vector3
-  fogColor: THREE.Color
+  cameraPosition: Vector3
+  cameraTarget: Vector3
+  fogColor: Color
   fogNear: number
   fogFar: number
 }
@@ -12,44 +12,69 @@ export interface ZoneConfig {
 export const ZONES: ZoneConfig[] = [
   {
     name: 'sunset',
-    cameraPosition: new THREE.Vector3(0, 1.4, 6.5),
-    cameraTarget: new THREE.Vector3(0, 0, -5),
-    fogColor: new THREE.Color('#1a0820'),
+    cameraPosition: new Vector3(0, 1.4, 6.5),
+    cameraTarget: new Vector3(0, 0, -5),
+    fogColor: new Color('#1a0820'),
     fogNear: 15,
     fogFar: 60,
   },
   {
-    name: 'forest',
-    cameraPosition: new THREE.Vector3(0, 1, -10),
-    cameraTarget: new THREE.Vector3(0, 0, -20),
-    fogColor: new THREE.Color('#0a1a06'),
-    fogNear: 10,
-    fogFar: 50,
+    name: 'surface',
+    cameraPosition: new Vector3(0, -1.4, -2),
+    cameraTarget: new Vector3(0, -6, -8),
+    fogColor: new Color('#053447'),
+    fogNear: 4,
+    fogFar: 30,
   },
   {
-    name: 'shore',
-    cameraPosition: new THREE.Vector3(0, 0.5, -30),
-    cameraTarget: new THREE.Vector3(0, 0, -40),
-    fogColor: new THREE.Color('#060f1a'),
-    fogNear: 12,
-    fogFar: 55,
+    name: 'shallow',
+    cameraPosition: new Vector3(0, -6, -8),
+    cameraTarget: new Vector3(0, -14, -12),
+    fogColor: new Color('#03212d'),
+    fogNear: 3,
+    fogFar: 22,
   },
   {
-    name: 'shallowSea',
-    cameraPosition: new THREE.Vector3(0, -1, -50),
-    cameraTarget: new THREE.Vector3(0, -2, -60),
-    fogColor: new THREE.Color('#020610'),
-    fogNear: 8,
-    fogFar: 45,
+    name: 'mid',
+    cameraPosition: new Vector3(0, -18, -14),
+    cameraTarget: new Vector3(0, -28, -16),
+    fogColor: new Color('#01121b'),
+    fogNear: 2,
+    fogFar: 16,
   },
   {
-    name: 'deepSea',
-    cameraPosition: new THREE.Vector3(0, -3, -70),
-    cameraTarget: new THREE.Vector3(0, -4, -80),
-    fogColor: new THREE.Color('#000204'),
-    fogNear: 5,
-    fogFar: 35,
+    name: 'abyss',
+    cameraPosition: new Vector3(0, -38, -18),
+    cameraTarget: new Vector3(0, -50, -18),
+    fogColor: new Color('#000305'),
+    fogNear: 1,
+    fogFar: 10,
   },
 ]
+
+// Catmull-Rom waypoints for the zone 0 -> zone 1 plunge. Camera pushes forward
+// over the beach, dips toward the water surface, punches through, then settles
+// into the surface zone pose. Targets pull the gaze downward through the same
+// curve so the look-vector swings naturally with the body of the camera.
+export const DIVE_POSITIONS: Vector3[] = [
+  new Vector3(0, 1.4, 6.5),
+  new Vector3(0, 0.6, 3.5),
+  new Vector3(0, -0.2, 0.5),
+  new Vector3(0, -0.95, -1.2),
+  new Vector3(0, -1.4, -2),
+]
+
+export const DIVE_TARGETS: Vector3[] = [
+  new Vector3(0, 0, -5),
+  new Vector3(0, -1, -5),
+  new Vector3(0, -3, -6),
+  new Vector3(0, -5, -7),
+  new Vector3(0, -6, -8),
+]
+
+// Y of the water plane. Single source of truth: BeachScene positions the
+// ocean mesh here, HookLine uses it to switch the rope from diagonal-to-rod
+// to straight-up underwater.
+export const WATER_SURFACE_Y = -1.15
 
 export const ZONE_COUNT = ZONES.length

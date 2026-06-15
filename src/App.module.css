@@ -10,5 +10,9 @@
 }
 
 .section {
-  height: 100vh;
+  /* Each section spans 4 viewport heights so the same wheel tick produces
+     a quarter of the scroll progress — every scroll-driven effect (character
+     cast animation, rod swing, zones, descent, sun fade) feels much more
+     pausado without touching any animation logic. */
+  height: 400vh;
 }
