@@ -3,15 +3,15 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 import { hookWorldPosition, rodTipWorldPosition } from '../state/hookState'
+import { WATER_SURFACE_Y } from '../config/zones'
 import { CANDLE_HEIGHT } from './Candle'
 
 const ROPE_RADIUS = 0.0018
 const LINE_UP = new THREE.Vector3(0, 1, 0)
-// Below this Y the candle is underwater. We then draw the rope going straight
-// up from the candle (toward the unseen surface) instead of diagonally to the
-// rod tip far away on the beach — the side-on camera makes the diagonal read
-// as a confusing slash across the frame.
-const WATER_SURFACE_Y = -1.15
+// Once the candle crosses the water plane the rope switches from "diagonal
+// to the rod tip on the beach" to "straight up toward the unseen surface" —
+// the side-on camera makes the diagonal read as a confusing slash across
+// the frame.
 const UNDERWATER_ROPE_LENGTH = 80
 
 const HookLine = () => {

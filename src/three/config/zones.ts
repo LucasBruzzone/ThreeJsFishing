@@ -72,8 +72,9 @@ export const DIVE_TARGETS: THREE.Vector3[] = [
   new THREE.Vector3(0, -6, -8),
 ]
 
-// The y at which the camera punches through the water surface; used to spike
-// chromatic aberration and densify fog at the crossing instant.
-export const WATER_SURFACE_Y = -1.0
+// Y of the water plane. Single source of truth: BeachScene positions the
+// ocean mesh here, HookLine uses it to switch the rope from diagonal-to-rod
+// to straight-up underwater.
+export const WATER_SURFACE_Y = -1.15
 
 export const ZONE_COUNT = ZONES.length

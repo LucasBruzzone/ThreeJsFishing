@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 import { SUN_POSITION } from '../config/sun'
+import { WATER_SURFACE_Y } from '../config/zones'
 import { getZoneTransition } from '../hooks/useZoneTransition'
 import FishingCharacter from './FishingCharacter'
 import PalmTree from './PalmTree'
@@ -15,7 +16,6 @@ interface Props {
 }
 
 const SAND_Y = -1.0
-const WATER_Y = -1.15
 const SHORE_Z = -5
 
 const BeachScene = ({ scrollRef }: Props) => {
@@ -68,7 +68,7 @@ const BeachScene = ({ scrollRef }: Props) => {
       </mesh>
 
       {/* Ocean */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, WATER_Y, -25]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, WATER_SURFACE_Y, -25]}>
         <planeGeometry args={[120, 40, 64, 64]} />
         <shaderMaterial
           vertexShader={waterVertexShader}

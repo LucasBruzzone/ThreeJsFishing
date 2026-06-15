@@ -46,10 +46,12 @@ const Bubbles = ({ scrollRef }: Props) => {
     if (!points || !material) return
 
     const { currentZone, blend } = getZoneTransition(scrollRef.current)
-    let opacity = 0
-    if (currentZone === 0) opacity = THREE.MathUtils.smoothstep(blend, 0.7, 1.0)
-    else if (currentZone < 4) opacity = 1
-    else opacity = 1 - blend
+    // Bubbles fade in late in zone 0 (last 30%) and stay fully visible through
+    // every underwater zone. `getZoneTransition` clamps currentZone to
+    // ZONE_COUNT - 2, so it never reaches the final index.
+    const opacity = currentZone === 0
+      ? THREE.MathUtils.smoothstep(blend, 0.7, 1.0)
+      : 1
     material.opacity = opacity * 0.55
     const visible = opacity > 0.01
     points.visible = visible
