@@ -1,6 +1,7 @@
 .root {
   position: relative;
   width: 100%;
+  background: linear-gradient(180deg, #1a2540 0%, #0a1530 60%, #050a1c 100%);
 }
 
 .sections {

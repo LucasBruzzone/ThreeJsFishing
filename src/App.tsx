@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 
 import DepthIndicator from './components/DepthIndicator'
-
-const WorldScene = lazy(() => import('./three/scenes/WorldScene'))
 import { useScrollProgress } from './three/hooks/useScrollProgress'
 import { getZoneTransition } from './three/hooks/useZoneTransition'
 
 import styles from './App.module.css'
+
+const WorldScene = lazy(() => import('./three/scenes/WorldScene'))
 
 const App = () => {
   const scrollRef = useScrollProgress()
