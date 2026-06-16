@@ -52,26 +52,6 @@ export const ZONES: ZoneConfig[] = [
   },
 ]
 
-// Catmull-Rom waypoints for the zone 0 -> zone 1 plunge. Camera pushes forward
-// over the beach, dips toward the water surface, punches through, then settles
-// into the surface zone pose. Targets pull the gaze downward through the same
-// curve so the look-vector swings naturally with the body of the camera.
-export const DIVE_POSITIONS: Vector3[] = [
-  new Vector3(0, 1.4, 6.5),
-  new Vector3(0, 0.6, 3.5),
-  new Vector3(0, -0.2, 0.5),
-  new Vector3(0, -0.95, -1.2),
-  new Vector3(0, -1.4, -2),
-]
-
-export const DIVE_TARGETS: Vector3[] = [
-  new Vector3(0, 0, -5),
-  new Vector3(0, -1, -5),
-  new Vector3(0, -3, -6),
-  new Vector3(0, -5, -7),
-  new Vector3(0, -6, -8),
-]
-
 // Y of the water plane. Single source of truth: BeachScene positions the
 // ocean mesh here, HookLine uses it to switch the rope from diagonal-to-rod
 // to straight-up underwater.
