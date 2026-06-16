@@ -1,5 +1,9 @@
 node_modules/
 dist/
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.d.ts.map
+vite.config.js
 .env
 .env.local
 .DS_Store
@@ -12,3 +16,6 @@ dist/
 /*.jpg
 .playwright-mcp/
 .screenshots/
+
+# Internal planning / spec docs (kept local for context, not published)
+docs/
