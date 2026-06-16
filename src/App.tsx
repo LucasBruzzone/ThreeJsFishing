@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 
-import WorldScene from './three/scenes/WorldScene'
 import DepthIndicator from './components/DepthIndicator'
+
+const WorldScene = lazy(() => import('./three/scenes/WorldScene'))
 import { useScrollProgress } from './three/hooks/useScrollProgress'
 import { getZoneTransition } from './three/hooks/useZoneTransition'
 
@@ -26,7 +27,9 @@ const App = () => {
 
   return (
     <div className={styles.root}>
-      <WorldScene scrollRef={scrollRef} />
+      <Suspense fallback={null}>
+        <WorldScene scrollRef={scrollRef} />
+      </Suspense>
       <DepthIndicator activeZone={activeZone} />
       <div className={styles.sections}>
         <div className={styles.section} />
