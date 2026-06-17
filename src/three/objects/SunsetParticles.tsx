@@ -5,8 +5,9 @@ import * as THREE from 'three'
 import { getZoneTransition } from '../hooks/useZoneTransition'
 import vertexShader from '../shaders/sunsetParticles.vert.glsl'
 import fragmentShader from '../shaders/sunsetParticles.frag.glsl'
+import { IS_LOW_END } from '../config/deviceTier'
 
-const PARTICLE_COUNT = 1200
+const PARTICLE_COUNT = IS_LOW_END ? 500 : 1200
 
 interface Props {
   scrollRef: MutableRefObject<number>

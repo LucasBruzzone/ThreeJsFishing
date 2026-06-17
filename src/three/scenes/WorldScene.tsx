@@ -18,6 +18,7 @@ import SceneController from '../objects/SceneController'
 import DynamicBloom from '../objects/DynamicBloom'
 import { ZONE_POST } from '../config/postprocessing'
 import { ZONES } from '../config/zones'
+import { IS_LOW_END } from '../config/deviceTier'
 
 interface Props {
   scrollRef: MutableRefObject<number>
@@ -30,7 +31,7 @@ const initialBackground = initialZone.fogColor.clone()
 const WorldScene = ({ scrollRef }: Props) => (
   <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
     <Canvas
-      dpr={[1, 1.5]}
+      dpr={IS_LOW_END ? 1 : [1, 1.5]}
       camera={{ position: initialZone.cameraPosition.toArray(), fov: 60, near: 0.1, far: 200 }}
       gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}
       scene={{ background: initialBackground }}
@@ -55,19 +56,25 @@ const WorldScene = ({ scrollRef }: Props) => (
       <Splash scrollRef={scrollRef} />
 
       <EffectComposer>
-        <DynamicBloom scrollRef={scrollRef} />
-        <ChromaticAberration
-          offset={new Vector2(post.chromaticAberrationOffset, post.chromaticAberrationOffset)}
-          blendFunction={BlendFunction.NORMAL}
-          radialModulation={false}
-          modulationOffset={0}
-        />
-        <Vignette
-          offset={post.vignetteOffset}
-          darkness={post.vignetteDarkness}
-          blendFunction={BlendFunction.NORMAL}
-        />
-        <Noise opacity={0.02} blendFunction={BlendFunction.OVERLAY} />
+        {[
+          <Vignette
+            key="vignette"
+            offset={post.vignetteOffset}
+            darkness={post.vignetteDarkness}
+            blendFunction={BlendFunction.NORMAL}
+          />,
+          ...(IS_LOW_END ? [] : [
+            <DynamicBloom key="bloom" scrollRef={scrollRef} />,
+            <ChromaticAberration
+              key="chromatic"
+              offset={new Vector2(post.chromaticAberrationOffset, post.chromaticAberrationOffset)}
+              blendFunction={BlendFunction.NORMAL}
+              radialModulation={false}
+              modulationOffset={0}
+            />,
+            <Noise key="noise" opacity={0.02} blendFunction={BlendFunction.OVERLAY} />,
+          ]),
+        ]}
       </EffectComposer>
     </Canvas>
   </div>

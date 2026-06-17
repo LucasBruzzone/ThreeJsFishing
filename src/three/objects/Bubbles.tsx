@@ -3,12 +3,13 @@ import { useFrame } from '@react-three/fiber'
 import { BufferAttribute, BufferGeometry, MathUtils, Points, PointsMaterial } from 'three'
 
 import { getZoneTransition } from '../hooks/useZoneTransition'
+import { IS_LOW_END } from '../config/deviceTier'
 
 interface Props {
   scrollRef: MutableRefObject<number>
 }
 
-const BUBBLE_COUNT = 220
+const BUBBLE_COUNT = IS_LOW_END ? 100 : 220
 const FIELD_X = 30
 const FIELD_Y_MIN = -45
 const FIELD_Y_MAX = 5
