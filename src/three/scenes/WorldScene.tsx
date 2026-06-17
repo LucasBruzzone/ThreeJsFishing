@@ -56,23 +56,25 @@ const WorldScene = ({ scrollRef }: Props) => (
       <Splash scrollRef={scrollRef} />
 
       <EffectComposer>
-        <Vignette
-          offset={post.vignetteOffset}
-          darkness={post.vignetteDarkness}
-          blendFunction={BlendFunction.NORMAL}
-        />
-        {!IS_LOW_END && (
-          <>
-            <DynamicBloom scrollRef={scrollRef} />
+        {[
+          <Vignette
+            key="vignette"
+            offset={post.vignetteOffset}
+            darkness={post.vignetteDarkness}
+            blendFunction={BlendFunction.NORMAL}
+          />,
+          ...(IS_LOW_END ? [] : [
+            <DynamicBloom key="bloom" scrollRef={scrollRef} />,
             <ChromaticAberration
+              key="chromatic"
               offset={new Vector2(post.chromaticAberrationOffset, post.chromaticAberrationOffset)}
               blendFunction={BlendFunction.NORMAL}
               radialModulation={false}
               modulationOffset={0}
-            />
-            <Noise opacity={0.02} blendFunction={BlendFunction.OVERLAY} />
-          </>
-        )}
+            />,
+            <Noise key="noise" opacity={0.02} blendFunction={BlendFunction.OVERLAY} />,
+          ]),
+        ]}
       </EffectComposer>
     </Canvas>
   </div>
