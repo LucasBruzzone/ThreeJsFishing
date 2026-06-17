@@ -56,13 +56,12 @@ const WorldScene = ({ scrollRef }: Props) => (
       <Splash scrollRef={scrollRef} />
 
       <EffectComposer>
-        {IS_LOW_END ? (
-          <Vignette
-            offset={post.vignetteOffset}
-            darkness={post.vignetteDarkness}
-            blendFunction={BlendFunction.NORMAL}
-          />
-        ) : (
+        <Vignette
+          offset={post.vignetteOffset}
+          darkness={post.vignetteDarkness}
+          blendFunction={BlendFunction.NORMAL}
+        />
+        {!IS_LOW_END && (
           <>
             <DynamicBloom scrollRef={scrollRef} />
             <ChromaticAberration
@@ -70,11 +69,6 @@ const WorldScene = ({ scrollRef }: Props) => (
               blendFunction={BlendFunction.NORMAL}
               radialModulation={false}
               modulationOffset={0}
-            />
-            <Vignette
-              offset={post.vignetteOffset}
-              darkness={post.vignetteDarkness}
-              blendFunction={BlendFunction.NORMAL}
             />
             <Noise opacity={0.02} blendFunction={BlendFunction.OVERLAY} />
           </>
